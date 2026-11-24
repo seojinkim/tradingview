@@ -12,7 +12,6 @@ on:
 permissions:
   contents: write
   pages: write
-  id-token: write
 
 concurrency:
   group: update-and-deploy
@@ -65,19 +64,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Pages 설정이 "GitHub Actions"인 경우용 아티팩트 (브랜치 방식이면 무시됨)
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
 
-  deploy:
-    # Pages Source가 "GitHub Actions"일 때 배포. "Deploy from a branch(gh-pages)"면 위 단계로 이미 배포됨
-    needs: update
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Pages 빌드 요청
+        # GITHUB_TOKEN으로 한 push는 Pages 빌드를 자동으로 시작하지 않으므로 직접 요청
+        run: |
+          curl -sS -f -X POST \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages/builds"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
