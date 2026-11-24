@@ -1,0 +1,62 @@
+{
+ "generated_at": "2026-11-24T08:59:58+00:00",
+ "generated_at_kst": "2026-11-24 17:59",
+ "last_success": "2026-11-24T08:59:58+00:00",
+ "data_date": "2026-11-23",
+ "stale": false,
+ "errors": [],
+ "sources": {
+  "QQQ": "yahoo",
+  "QLD": "yahoo",
+  "SGOV": "yahoo"
+ },
+ "prices": {
+  "QQQ": {
+   "date": "2026-11-23",
+   "close": 651.03,
+   "source": "yahoo"
+  },
+  "QLD": {
+   "date": "2026-11-23",
+   "close": 71.91,
+   "source": "yahoo"
+  },
+  "SGOV": {
+   "date": "2026-11-23",
+   "close": 100.64,
+   "source": "yahoo"
+  }
+ },
+ "today": {
+  "date": "2026-11-23",
+  "close": 651.03,
+  "adjclose": 651.030029,
+  "hv": 0.467833,
+  "tv_hv": 56.3037,
+  "w": 0.267189,
+  "sma250": 670.486,
+  "above_sma": false,
+  "sma_gap_pct": -2.9018,
+  "leverage": 0.534378
+ },
+ "signal": {
+  "date": "2026-11-20",
+  "weekday": 4,
+  "hv": 0.387963,
+  "tv_hv": 46.6914,
+  "w": 0.322195,
+  "close": 608.45,
+  "sma250": 670.3026,
+  "above_sma": false,
+  "sma_gap_pct": -9.2276,
+  "prev_w": 0.362325,
+  "delta_w": -0.04013,
+  "leverage": 0.64439
+ },
+ "params": {
+  "hv_window": 20,
+  "target_vol": 0.125,
+  "band": 0.1,
+  "sma_window": 250
+ }
+}

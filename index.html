@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QLD 비중 대시보드</title>
+<meta name="robots" content="noindex">
+<style>
+:root{
+  --bg:#f4f4f2; --surface:#fcfcfb; --border:#e2e1dc; --grid:#ebeae6;
+  --text:#0b0b0b; --text2:#52514e; --muted:#7a7974;
+  --series:#2a78d6; --accent:#2a78d6;
+  --good:#0ca30c; --warn:#b07800; --bad:#d03b3b;
+  --good-bg:#e7f5e7; --warn-bg:#fdf3dc; --bad-bg:#fbe9e9;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111110; --surface:#1a1a19; --border:#2e2e2b; --grid:#2a2a27;
+    --text:#f0efec; --text2:#c3c2b7; --muted:#8f8e86;
+    --series:#3987e5; --accent:#5598e7;
+    --good:#0ca30c; --warn:#fab219; --bad:#e66767;
+    --good-bg:#14301a; --warn-bg:#33290f; --bad-bg:#3a1c1c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111110; --surface:#1a1a19; --border:#2e2e2b; --grid:#2a2a27;
+  --text:#f0efec; --text2:#c3c2b7; --muted:#8f8e86;
+  --series:#3987e5; --accent:#5598e7;
+  --good:#0ca30c; --warn:#fab219; --bad:#e66767;
+  --good-bg:#14301a; --warn-bg:#33290f; --bad-bg:#3a1c1c;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+  font-variant-numeric:tabular-nums}
+main{max-width:720px;margin:0 auto;padding:16px 16px 40px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:4px 0 12px}
+h1{font-size:18px;margin:0}
+h2{font-size:15px;margin:0 0 10px;color:var(--text2);font-weight:600}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
+.hero{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.big{font-size:44px;font-weight:700;line-height:1.05;letter-spacing:-.5px}
+.big small{font-size:15px;font-weight:500;color:var(--text2);margin-left:4px}
+.label{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:14px}
+.kv .v{font-size:18px;font-weight:600}
+.sub{color:var(--text2);font-size:13px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.down{background:var(--bad-bg);color:var(--bad)}
+.today{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px dashed var(--border)}
+form.inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label.f{display:flex;flex-direction:column;font-size:12px;color:var(--text2);gap:4px}
+input[type=number]{font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);width:100%}
+input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.check{grid-column:1/-1;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--text2)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 4px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:500}
+.action{border-radius:12px;padding:14px;margin-top:4px}
+.action.hold{background:var(--good-bg)}
+.action.trade{background:var(--warn-bg)}
+.action b{font-size:17px}
+.action ul{margin:8px 0 0;padding-left:18px}
+.chart{position:relative;margin-top:6px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 9px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.12);white-space:nowrap;display:none;z-index:2}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.seg button{font:inherit;font-size:13px;border:0;background:transparent;color:var(--text2);padding:5px 12px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--accent);color:#fff}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.tablewrap{overflow-x:auto;margin:0 -4px}
+button.link{font:inherit;font-size:13px;background:none;border:0;color:var(--accent);cursor:pointer;padding:8px 0}
+footer{font-size:12px;color:var(--muted);text-align:center;margin-top:20px;line-height:1.7}
+.stale{background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:13px;display:none}
+.err{color:var(--bad)}
+@media (max-width:420px){.big{font-size:38px}.grid2{gap:8px 12px}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>QLD 비중 대시보드</h1>
+    <span class="label" id="asof"></span>
+  </header>
+
+  <div class="stale" id="staleBox"></div>
+
+  <section class="card" id="signalCard">
+    <h2 id="signalTitle">이번 주 확정 신호</h2>
+    <div class="hero">
+      <div>
+        <div class="label">TradingView HV(20)</div>
+        <div class="big" id="sHv">–</div>
+      </div>
+      <div>
+        <div class="label">목표 QLD 비중</div>
+        <div class="big" id="sW">–</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="kv"><div class="label">레버리지 환산 (w×2)</div><div class="v" id="sLev">–</div></div>
+      <div class="kv"><div class="label">지난주 대비</div><div class="v" id="sDelta">–</div></div>
+      <div class="kv"><div class="label">QQQ 250일선</div><div class="v" id="sSma">–</div></div>
+      <div class="kv"><div class="label">QQQ 종가</div><div class="v" id="sClose">–</div></div>
+    </div>
+    <div class="today">
+      <div><div class="label" id="tLabel">오늘 기준이라면</div>
+        <div><b id="tHv">–</b> <span class="sub">HV</span> · <b id="tW">–</b> <span class="sub">목표</span></div></div>
+      <div style="text-align:right"><div class="label">250일선 (오늘)</div><div id="tSma">–</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>내 포트폴리오</h2>
+    <form class="inputs" id="pf" onsubmit="return false">
+      <label class="f">QLD 수량<input type="number" id="qldQty" inputmode="decimal" step="any" min="0" placeholder="0"></label>
+      <label class="f">SGOV 수량<input type="number" id="sgovQty" inputmode="decimal" step="any" min="0" placeholder="0"></label>
+      <label class="f">달러 예수금 ($)<input type="number" id="cash" inputmode="decimal" step="any" min="0" placeholder="0"></label>
+      <label class="f">하루 적립액 ($)<input type="number" id="daily" inputmode="decimal" step="any" min="0" placeholder="100"></label>
+      <label class="check"><input type="checkbox" id="useSgov" checked> 남는 돈(1−w)은 SGOV로 운용 (해제 시 SGOV는 그대로, 예수금으로 조정)</label>
+    </form>
+    <div class="tablewrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>종목</th><th>종가</th><th>평가액</th><th>비중</th></tr></thead>
+        <tbody id="pfBody"></tbody>
+      </table>
+    </div>
+    <div class="label" style="margin-top:6px">보유 수량은 이 브라우저(localStorage)에만 저장되고 서버로 전송되지 않습니다.</div>
+  </section>
+
+  <section class="card">
+    <h2>리밸런싱 안내</h2>
+    <div id="rebal" class="sub">보유 수량을 입력하면 계산됩니다.</div>
+  </section>
+
+  <section class="card">
+    <h2>매일 적립 안내</h2>
+    <div id="contrib" class="sub">–</div>
+  </section>
+
+  <section class="card">
+    <div class="row"><h2 style="margin:0">추이</h2>
+      <div class="seg" role="group" aria-label="기간">
+        <button type="button" data-range="252" aria-pressed="true">1년</button>
+        <button type="button" data-range="504" aria-pressed="false">2년</button>
+      </div>
+    </div>
+    <div class="label" style="margin-top:12px">TradingView HV(20) · 점선 15 = 목표 비중 100% 경계</div>
+    <div class="chart" id="chartHv"></div>
+    <div class="label" style="margin-top:14px">목표 QLD 비중 (%) · 일별 "오늘 기준" 값</div>
+    <div class="chart" id="chartW"></div>
+  </section>
+
+  <section class="card">
+    <h2>주간 신호 기록</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>신호일(금)</th><th>HV(TV)</th><th>목표</th><th>변화</th><th>250일선 이격</th></tr></thead>
+        <tbody id="weekly"></tbody>
+      </table>
+    </div>
+    <button class="link" id="moreWeeks" type="button">더 보기</button>
+  </section>
+
+  <footer>
+    <div id="meta"></div>
+    <div>신호: 매주 마지막 거래일(보통 금요일) 종가 확정 → 다음 거래일 매매 · 조정 기준 ±10%p</div>
+    <div>참고용 계산이며 투자 판단은 본인 책임입니다.</div>
+  </footer>
+</main>
+<script src="rebalance.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
