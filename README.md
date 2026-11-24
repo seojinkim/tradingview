@@ -16,7 +16,7 @@ GitHub Actions가 매일(한국 시간 화~토 08:10) 데이터를 받아 `data/
 
 ## 구조
 ```
-.github/workflows/update.yml  매일 실행: 테스트 → 수집 → 커밋 → Pages 배포
+.github/workflows/update.yml  매일 실행: 테스트 → 수집 → 커밋 → gh-pages 브랜치 배포
 scripts/strategy.py           지표·주간 신호 계산 (표준 라이브러리만)
 scripts/fetch_data.py         Yahoo → Stooq 폴백, 둘 다 실패 시 기존 데이터 유지 + stale
 rebalance.js                  리밸런싱/적립 계산 (브라우저·Node 테스트 공용)
