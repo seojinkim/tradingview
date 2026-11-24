@@ -11,6 +11,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: update-and-deploy
@@ -62,3 +64,20 @@ jobs:
           git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Pages 설정이 "GitHub Actions"인 경우용 아티팩트 (브랜치 방식이면 무시됨)
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    # Pages Source가 "GitHub Actions"일 때 배포. "Deploy from a branch(gh-pages)"면 위 단계로 이미 배포됨
+    needs: update
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
