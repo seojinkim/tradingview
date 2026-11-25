@@ -48,6 +48,15 @@ def parse_yahoo(raw: bytes) -> list[tuple[date, float, float]]:
             continue
         d = datetime.fromtimestamp(t, tz).date()
         rows.append((d, float(c), float(a if a is not None else c)))
+    # Yahoo는 장 마감 직후 마지막 일봉 종가를 null로 주는 경우가 있다.
+    # 이때 meta의 정규장 종가(regularMarketPrice/Time)가 그날 장 마감 이후 값이면 채워 넣는다.
+    meta = res["meta"]
+    mkt_t, mkt_px = meta.get("regularMarketTime"), meta.get("regularMarketPrice")
+    if ts and closes and closes[-1] is None and mkt_t and mkt_px:
+        last_d = datetime.fromtimestamp(ts[-1], tz).date()
+        mkt_dt = datetime.fromtimestamp(mkt_t, tz)
+        if mkt_dt.date() == last_d and mkt_dt.hour >= 16 and (not rows or rows[-1][0] < last_d):
+            rows.append((last_d, float(mkt_px), float(mkt_px)))
     if len(rows) < 30:
         raise ValueError(f"Yahoo: 데이터 부족 ({len(rows)}행)")
     return rows

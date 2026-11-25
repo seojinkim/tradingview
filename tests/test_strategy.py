@@ -154,6 +154,32 @@ class TestDataHandling(unittest.TestCase):
         self.assertEqual(len(rows), 39)
 
 
+class TestYahooNullLastBar(unittest.TestCase):
+    def make(self, mkt_hour_utc):
+        base = int(datetime(2026, 10, 1, 14, 30, tzinfo=timezone.utc).timestamp())
+        ts = [base + 86400 * i for i in range(40)]
+        closes = [100.0 + i for i in range(40)]
+        closes[-1] = None
+        last_day = datetime.fromtimestamp(ts[-1], timezone.utc).date()
+        mkt = int(datetime.combine(last_day, datetime.min.time(), timezone.utc).timestamp()) + mkt_hour_utc * 3600
+        return json.dumps({"chart": {"result": [{
+            "meta": {"exchangeTimezoneName": "America/New_York",
+                     "regularMarketTime": mkt, "regularMarketPrice": 150.5},
+            "timestamp": ts,
+            "indicators": {"quote": [{"close": closes}], "adjclose": [{"adjclose": closes}]},
+        }]}}).encode(), last_day
+
+    def test_fill_after_close(self):
+        raw, last_day = self.make(21)  # 16:00 ET
+        rows = fetch_data.parse_yahoo(raw)
+        self.assertEqual(rows[-1], (last_day, 150.5, 150.5))
+
+    def test_no_fill_intraday(self):
+        raw, last_day = self.make(17)  # 12:00 ET (장중)
+        rows = fetch_data.parse_yahoo(raw)
+        self.assertNotEqual(rows[-1][0], last_day)
+
+
 class TestRebalance(unittest.TestCase):
     def test_hold_when_within_band(self):
         r = strategy.rebalance(65, 100, 0.58)
