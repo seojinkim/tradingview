@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-11-24T14:10:52+00:00",
- "generated_at_kst": "2026-11-24 23:10",
- "last_success": "2026-11-24T14:10:52+00:00",
+ "generated_at": "2026-11-25T01:34:48+00:00",
+ "generated_at_kst": "2026-11-25 10:34",
+ "last_success": "2026-11-25T01:34:48+00:00",
  "data_date": "2026-11-23",
  "stale": false,
  "errors": [],
@@ -31,27 +31,27 @@
   "date": "2026-11-23",
   "close": 651.03,
   "adjclose": 651.030029,
-  "hv": 0.467833,
-  "tv_hv": 56.3037,
-  "w": 0.267189,
+  "hv": 0.469245,
+  "tv_hv": 56.4737,
+  "w": 0.266385,
   "sma250": 670.486,
   "above_sma": false,
   "sma_gap_pct": -2.9018,
-  "leverage": 0.534378
+  "leverage": 0.53277
  },
  "signal": {
   "date": "2026-11-20",
   "weekday": 4,
-  "hv": 0.387963,
-  "tv_hv": 46.6914,
-  "w": 0.322195,
+  "hv": 0.394516,
+  "tv_hv": 47.48,
+  "w": 0.316844,
   "close": 608.45,
   "sma250": 670.3026,
   "above_sma": false,
   "sma_gap_pct": -9.2276,
-  "prev_w": 0.362325,
-  "delta_w": -0.04013,
-  "leverage": 0.64439
+  "prev_w": 0.357072,
+  "delta_w": -0.040228,
+  "leverage": 0.633688
  },
  "params": {
   "hv_window": 20,
