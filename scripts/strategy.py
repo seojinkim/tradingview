@@ -1,6 +1,6 @@
 """QQQ 변동성 타깃 전략 계산 (표준 라이브러리만 사용).
 
-- r      = 오늘 QQQ 수정종가 / 어제 수정종가 - 1
+- r      = ln(오늘 QQQ 수정종가 / 어제 수정종가)   (로그 수익률, TradingView HV와 동일)
 - hv     = 최근 20개 r의 모집단 표준편차 × √252
 - tv_hv  = hv × √(365/252) × 100   (TradingView HV(20) 표시값)
 - w      = min(1, 0.125 / hv)      (= 15 / tv_hv)
@@ -46,7 +46,7 @@ def compute_series(rows: list[tuple[date, float, float]]) -> list[dict]:
     prev_adj = None
     for d, (close, adj) in clean:
         if prev_adj is not None:
-            rets.append(adj / prev_adj - 1)
+            rets.append(math.log(adj / prev_adj))
         prev_adj = adj
         closes.append(close)
         row = {"date": d.isoformat(), "close": round(close, 4), "adjclose": round(adj, 6)}

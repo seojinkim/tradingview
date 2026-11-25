@@ -49,18 +49,18 @@ class TestKnownValues(unittest.TestCase):
 
     def check(self, d, hv_pct, tv, w_pct):
         r = self.s[d]
-        self.assertAlmostEqual(r["hv"] * 100, hv_pct, delta=0.1)
-        self.assertAlmostEqual(r["tv_hv"], tv, delta=0.1)
-        self.assertAlmostEqual(r["w"] * 100, w_pct, delta=0.5)
+        self.assertAlmostEqual(r["hv"] * 100, hv_pct, delta=0.01)
+        self.assertAlmostEqual(r["tv_hv"], tv, delta=0.01)
+        self.assertAlmostEqual(r["w"] * 100, w_pct, delta=0.1)
         # w = 12.5% / hv. "15 / TV HV"는 근사(정확히는 12.5×√(365/252)=15.04)
         self.assertAlmostEqual(r["w"], min(1, 0.125 / r["hv"]), places=5)
         self.assertAlmostEqual(r["w"] * 100, 15 / r["tv_hv"] * 100, delta=0.15)
 
     def test_2026_11_20_friday(self):
-        self.check("2026-11-20", 38.8, 46.7, 32)
+        self.check("2026-11-20", 39.45, 47.48, 31.7)  # TradingView HV(20) 47.48
 
     def test_2026_11_23_monday(self):
-        self.check("2026-11-23", 46.8, 56.3, 27)
+        self.check("2026-11-23", 46.92, 56.47, 26.6)  # TradingView HV(20) 56.47
 
 
 class TestWeeklySignal(unittest.TestCase):
@@ -69,7 +69,7 @@ class TestWeeklySignal(unittest.TestCase):
         now = datetime(2026, 11, 24, 8, 10, tzinfo=KST).astimezone(ET)
         sigs = strategy.weekly_signals(series, now)
         self.assertEqual(sigs[-1]["date"], "2026-11-20")
-        self.assertAlmostEqual(sigs[-1]["w"] * 100, 32, delta=0.5)
+        self.assertAlmostEqual(sigs[-1]["w"] * 100, 31.7, delta=0.1)
         self.assertIn("delta_w", sigs[-1])
         self.assertTrue(all(date.fromisoformat(s["date"]).weekday() == 4 or
                             date.fromisoformat(s["date"]).weekday() < 4 for s in sigs))
