@@ -21,7 +21,10 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      # 기본 브랜치 설정과 상관없이 항상 main 기준으로 계산·커밋
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
@@ -48,7 +51,7 @@ jobs:
             echo "변경 없음"
           else
             git commit -m "data: $(python -c 'import json;print(json.load(open("data/latest.json")).get("data_date","update"))')"
-            git push
+            git push origin HEAD:main
           fi
 
       - name: gh-pages 브랜치로 배포
