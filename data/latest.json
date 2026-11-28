@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-11-27T13:58:33+00:00",
- "generated_at_kst": "2026-11-27 22:58",
- "last_success": "2026-11-27T13:58:33+00:00",
- "data_date": "2026-11-25",
+ "generated_at": "2026-11-28T03:29:35+00:00",
+ "generated_at_kst": "2026-11-28 12:29",
+ "last_success": "2026-11-28T03:29:35+00:00",
+ "data_date": "2026-11-27",
  "stale": false,
  "errors": [],
  "sources": {
@@ -12,46 +12,46 @@
  },
  "prices": {
   "QQQ": {
-   "date": "2026-11-25",
-   "close": 633.93,
+   "date": "2026-11-27",
+   "close": 650.99,
    "source": "yahoo"
   },
   "QLD": {
-   "date": "2026-11-25",
-   "close": 68.15,
+   "date": "2026-11-27",
+   "close": 71.75,
    "source": "yahoo"
   },
   "SGOV": {
-   "date": "2026-11-25",
-   "close": 100.68,
+   "date": "2026-11-27",
+   "close": 100.71,
    "source": "yahoo"
   }
  },
  "today": {
-  "date": "2026-11-25",
-  "close": 633.93,
-  "adjclose": 633.929993,
-  "hv": 0.46575,
-  "tv_hv": 56.0531,
-  "w": 0.268384,
-  "sma250": 670.6815,
+  "date": "2026-11-27",
+  "close": 650.99,
+  "adjclose": 650.98999,
+  "hv": 0.478691,
+  "tv_hv": 57.6105,
+  "w": 0.261129,
+  "sma250": 670.8085,
   "above_sma": false,
-  "sma_gap_pct": -5.4797,
-  "leverage": 0.536768
+  "sma_gap_pct": -2.9544,
+  "leverage": 0.522258
  },
  "signal": {
-  "date": "2026-11-20",
+  "date": "2026-11-27",
   "weekday": 4,
-  "hv": 0.394516,
-  "tv_hv": 47.48,
-  "w": 0.316844,
-  "close": 608.45,
-  "sma250": 670.3026,
+  "hv": 0.478691,
+  "tv_hv": 57.6105,
+  "w": 0.261129,
+  "close": 650.99,
+  "sma250": 670.8085,
   "above_sma": false,
-  "sma_gap_pct": -9.2276,
-  "prev_w": 0.357072,
-  "delta_w": -0.040228,
-  "leverage": 0.633688
+  "sma_gap_pct": -2.9544,
+  "prev_w": 0.316844,
+  "delta_w": -0.055715,
+  "leverage": 0.522258
  },
  "params": {
   "hv_window": 20,
